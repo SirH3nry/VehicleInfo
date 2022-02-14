@@ -46,7 +46,7 @@ namespace Vehicles.Api.Controllers
         }
 
         /// <summary>
-        /// Gets and returns all of the vehicles.
+        /// Gets and returns a single vehicle, by identifier.
         /// </summary>
         [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<VehicleResponse>))]
