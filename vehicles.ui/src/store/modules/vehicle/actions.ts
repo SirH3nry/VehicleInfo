@@ -12,11 +12,9 @@ export class VehicleActions {
 
 export const actions: ActionTree<VehicleStoreInterface, RootState> = {
   loadVehicles({ commit }) {
-    console.info('loading vehicles...')
     axios
       .get<Array<VehicleItemApiResponseInterface>>('http://localhost:14651/api/vehicles')
       .then<Array<VehicleItemInterface>>((response) => {
-        console.info('api callout completed', response)
         if (isEmpty(response?.data)) throw new Error('response is empty')
         const vehicles = response.data
           .map(v => {
@@ -29,7 +27,6 @@ export const actions: ActionTree<VehicleStoreInterface, RootState> = {
           })
 
         commit(VehicleMutations.SET_VEHICLES, { vehicles: vehicles })
-        console.info('api callout successful', response)
         return vehicles
       })
       .catch(e => console.error('vehicle/loadVehicles :: failed', e))
