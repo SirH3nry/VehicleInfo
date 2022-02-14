@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Vehicles.Api.Common;
 using Vehicles.Api.Entities.Context;
+using Vehicles.Api.Fixtures;
 using Vehicles.Api.Responses;
 
 namespace Vehicles.Api.Services
@@ -17,20 +18,33 @@ namespace Vehicles.Api.Services
         {
             List<VehicleResponse> responses = new();
 
-            using (MasterContext dbContext = new())
-            {
-                DbSet<Entities.Types.Vehicles> vehicles = dbContext.Vehicles;
+            // If you have the database set up, then change the following boolean to true
+            bool hasDatabase = true;
 
-                foreach (Entities.Types.Vehicles vehicle in vehicles)
+            if (hasDatabase)
+            {
+                using (MasterContext dbContext = new())
                 {
-                    responses.Add(new()
+                    DbSet<Entities.Types.Vehicles> vehicles = dbContext.Vehicles;
+
+                    foreach (Entities.Types.Vehicles vehicle in vehicles)
                     {
-                        Description = vehicle.Description,
-                        Id = vehicle.Id,
-                        ImageName = vehicle.ImageName,
-                        Name = vehicle.Name
-                    });
+                        responses.Add(new()
+                        {
+                            Description = vehicle.Description,
+                            Id = vehicle.Id,
+                            ImageName = vehicle.ImageName,
+                            Name = vehicle.Name
+                        });
+                    }
                 }
+            }
+            else
+            {
+                responses.Add(VehicleFixtures.FordTaurus);
+                responses.Add(VehicleFixtures.HondaCivic);
+                responses.Add(VehicleFixtures.JeepRubicon);
+                responses.Add(VehicleFixtures.TeslaModel3);
             }
 
             return Task.FromResult(responses.AsEnumerable());
